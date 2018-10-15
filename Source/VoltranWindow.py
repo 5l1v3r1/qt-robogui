@@ -1,30 +1,46 @@
-from PyQt4 import QtCore, QtGui
+from PyQt4  import QtCore, QtGui
+from networktables import NetworkTables 
 
+ip = "10.71.8.2"
 
-
+NetworkTables.initialize(server = ip)
+sd = NetworkTables.getTable("datatable")
 
 class LEDControlPanel(QtGui.QWidget):
-    """docstring for LEDControlPanel."""
-    def __init__(self, settings={}):
-        super(LEDControlPanel, self).__init__()
-        self.settings = settings
+	"""docstring for LEDControlPanel."""
+	def __init__(self, settings={}):
+		
+		super(LEDControlPanel, self).__init__()
+		self.settings = settings
+		
+		self.v_layout = QtGui.QVBoxLayout()
+		self.v_layout.setAlignment(QtCore.Qt.AlignTop)
+		
+		labelLED = QtGui.QLabel("LED Control Panel")
+		buttonSetLEDToRed =  QtGui.QPushButton("Red")
+		buttonSetLEDToMagenta = QtGui.QPushButton("Magenta")
+		buttonSetLEDToBlue = QtGui.QPushButton("Blue")
+		
+		buttonSetLEDToRed.clicked.connect(self.on_redButton_click)
+		buttonSetLEDToMagenta.clicked.connect(self.on_magentaButton_click)
+		buttonSetLEDToBlue.clicked.connect(self.on_blueButton_click)
+		
+		self.v_layout.addWidget(labelLED)
+		self.v_layout.addWidget(buttonSetLEDToRed)
+		self.v_layout.addWidget(buttonSetLEDToBlue)
+		self.v_layout.addWidget(buttonSetLEDToMagenta)
+		self.setLayout(self.v_layout)
 
-        self.v_layout = QtGui.QVBoxLayout()
-        self.v_layout.setAlignment(QtCore.Qt.AlignTop)
-
-
-        for i in range(5):
-            button = QtGui.QPushButton("merhaba" + str(i))
-            button.clicked.connect(self.on_button_click)
-            self.v_layout.addWidget(button)
-
-        self.setLayout(self.v_layout)
-
-    def on_button_click(self):
-        print "CLICKED"
-
-
-
+	def on_redButton_click(self):
+		print ("LEDs have been changed to red succesfully")
+		sd.putNumber("LEDColor", 1)
+	def on_blueButton_click(self):
+		print ("LEDs have been changed to blue succesfully")
+		sd.putNumber("LEDColor", 2)
+	def on_magentaButton_click(self):
+		print ("LEDs have been changed to magenta succesfully")
+		sd.putNumber("LEDColor", 0)
+		
 class BottomStatusPanel(QtGui.QWidget):
     """docstring for BottomStatusPanel."""
     def __init__(self, settings={}):
@@ -34,8 +50,7 @@ class BottomStatusPanel(QtGui.QWidget):
         self.h_layout = QtGui.QHBoxLayout()
         self.h_layout.setAlignment(QtCore.Qt.AlignLeft)
 
-        for i in range(3):
-            self.h_layout.addWidget(QtGui.QLabel("Hello i am label " + str(i)))
+        self.h_layout.addWidget(QtGui.QLabel("Last Played Track:	" + sd.getString("lastPlayed", "")))
 
         self.setLayout(self.h_layout)
 
@@ -107,12 +122,6 @@ class VoltranMainWindow(QtGui.QMainWindow):
 
         statusWidget = BottomStatusPanel()
         leftVerticalBottomLayout.addWidget(statusWidget)
-
-
-
-
-
-
 
         mainLeftLayout.addLayout(leftVerticalLayout)
 
