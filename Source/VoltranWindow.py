@@ -60,14 +60,13 @@ class MainWidgetArea(QtGui.QWidget):
     def __init__(self, settings={}):
         super(MainWidgetArea, self).__init__()
         self.settings = settings
-
+    
         self.h_layout = QtGui.QHBoxLayout()
-        self.h_layout.setAlignment(QtCore.Qt.AlignLeft)
-
-        for i in range(3):
-            self.h_layout.addWidget(QtGui.QLabel("Hello i am label " + str(i)))
-
-        self.setLayout(self.h_layout)
+        self.h_layout.setAlignment(QtCore.Qt.AlignLeft)	
+		
+        self.h_layout.addWidget(QtGui.QLabel("Robot Status: " + sd.getString("roboStat"))
+        
+        self.setLayout(self.x_layout)
 
 
 
