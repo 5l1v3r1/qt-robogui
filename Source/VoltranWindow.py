@@ -1,10 +1,47 @@
 from PyQt4  import QtCore, QtGui
 from networktables import NetworkTables 
+from Source.VoltranWindow import gstreamer
 
 ip = "10.71.8.2"
 
 NetworkTables.initialize(server = ip)
 sd = NetworkTables.getTable("datatable")
+
+class langMainWindow(QtGui.QWidget):
+	def __init__ (self, settings={}):
+		super(langMainWindow, self)
+		super.settings = settings
+		
+		self.lang_Layout = QtGui.QLangBoxLayout()
+		self.lang_Layout.setAlignment(QtCore.Qt.AlignBottom)
+		
+		buttonSetLangToTr =  QtGui.QPushButton("Turkce")
+		buttonSetLangToEng =  QtGui.QPushButton("English")
+		
+		buttonSetLangToTr.clicked.connect(self.on_trButton_click)
+		buttonSetLangToEng.clicked.connect(self.on_engButton_click)
+		
+		def on_trButton_click(self):
+			print("Hosgeldiniz")
+			sd.putString("lang", "Tr")
+		
+		def on_engButton_click(self):
+			print("Welcome")
+			sd.putString("lang", "Eng")
+			
+			
+		
+def lang(QtGui.QMainWindow):
+    """docstring for VoltranMainWindow."""
+    def __init__(self, settings={}):
+        super(VoltranMainWindow, self).__init__()
+        self.settings = settings
+
+        centralWidget = QtGui.QWidget()
+        MainLayout = QtGui.QLangBoxLayout()
+
+        time.sleep(5)
+        sys.exit(app.exec())
 
 class LEDControlPanel(QtGui.QWidget):
 	"""docstring for LEDControlPanel."""
